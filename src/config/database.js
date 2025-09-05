@@ -1,10 +1,36 @@
 const { Sequelize } = require('sequelize');
 
 require('dotenv').config();
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD, typeof process.env.DB_PASSWORD);
 
 
 // Recomendado: manejar la contraseña SOLO por variable de entorno
+
+// Crear la base de datos si no existe antes de inicializar Sequelize
+const createDatabaseIfNotExists = async () => {
+  const dbName = process.env.DB_NAME || 'pravda';
+  const dbUser = process.env.DB_USER || 'postgres';
+  const dbPassword = process.env.DB_PASSWORD;
+  const dbHost = process.env.DB_HOST || 'localhost';
+  const dbPort = process.env.DB_PORT || 5432;
+  const { Client } = require('pg');
+  const client = new Client({
+    user: dbUser,
+    password: dbPassword,
+    host: dbHost,
+    port: dbPort,
+    database: 'postgres', // Conectamos a la base default para crear la nueva
+  });
+  await client.connect();
+  const res = await client.query(`SELECT 1 FROM pg_database WHERE datname = $1`, [dbName]);
+  if (res.rowCount === 0) {
+    await client.query(`CREATE DATABASE "${dbName}"`);
+    console.log(`Base de datos '${dbName}' creada automáticamente.`);
+  } else {
+    console.log(`Base de datos '${dbName}' ya existe.`);
+  }
+  await client.end();
+};
+
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'pravda',
   process.env.DB_USER || 'postgres',
@@ -20,10 +46,15 @@ const sequelize = new Sequelize(
 
 const connectDB = async () => {
   try {
+    await createDatabaseIfNotExists();
     await sequelize.authenticate();
     console.log('PostgreSQL conectado correctamente.');
-    await sequelize.sync();
-    console.log('Modelos sincronizados con la base de datos.');
+
+  // Importar los modelos para que se creen las tablas
+  require('../models/Personal');
+  require('../models/Blog')(sequelize);
+  await sequelize.sync();
+  console.log('Modelos sincronizados con la base de datos.');
 
     // Crear usuario admin por defecto si no existe
     const User = require('../models/User');

@@ -24,8 +24,17 @@ const Personal = sequelize.define('Personal', {
     allowNull: false
   },
   foto: {
-    type: DataTypes.STRING,
+
+    type: DataTypes.STRING(500),
     allowNull: true
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
   }
 }, {
   timestamps: true
