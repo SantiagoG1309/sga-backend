@@ -46,18 +46,25 @@ const sequelize = new Sequelize(
 
 const connectDB = async () => {
   try {
+    console.log('Intentando conectar a PostgreSQL...');
+    console.log('DB_HOST:', process.env.DB_HOST || 'localhost');
+    console.log('DB_NAME:', process.env.DB_NAME || 'pravda');
+    console.log('DB_USER:', process.env.DB_USER || 'postgres');
+    console.log('DB_PORT:', process.env.DB_PORT || 5432);
+    
     await createDatabaseIfNotExists();
     await sequelize.authenticate();
     console.log('PostgreSQL conectado correctamente.');
 
-  // Importar los modelos para que se creen las tablas
-  require('../models/Personal');
-  require('../models/Blog')(sequelize);
+  // Importar y sincronizar los modelos
+  const User = require('../models/User');
+  const Personal = require('../models/Personal');
+  const Blog = require('../models/Blog');
+  
   await sequelize.sync();
   console.log('Modelos sincronizados con la base de datos.');
 
     // Crear usuario admin por defecto si no existe
-    const User = require('../models/User');
     const bcrypt = require('bcrypt');
     const adminEmail = 'admin@hotmail.com';
     const adminName = 'Admin';
