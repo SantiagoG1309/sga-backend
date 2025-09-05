@@ -34,11 +34,11 @@ bower_components
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
 
-# Dependency directories
 node_modules/
 jspm_packages/
 
-# TypeScript v1 declaration files
+# Ignorar solo el archivo de ejemplo de entorno
+.env.example
 typings/
 
 # TypeScript cache
@@ -66,7 +66,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+src/.env
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
