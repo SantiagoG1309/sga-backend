@@ -50,8 +50,9 @@ const connectDB = async () => {
     await createDatabaseIfNotExists();
     await sequelize.authenticate();
     console.log('PostgreSQL conectado correctamente.');
-  // Importar el modelo Personal para que se cree la tabla
+  // Importar los modelos para que se creen las tablas
   require('../models/Personal');
+  require('../models/Blog')(sequelize);
   await sequelize.sync();
   console.log('Modelos sincronizados con la base de datos.');
 
