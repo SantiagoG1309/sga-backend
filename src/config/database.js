@@ -1,11 +1,15 @@
 
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
 
+require('dotenv').config();
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD, typeof process.env.DB_PASSWORD);
+
+
+// Recomendado: manejar la contraseña SOLO por variable de entorno
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'pravda',
   process.env.DB_USER || 'postgres',
-  process.env.DB_PASSWORD || 'Andres1070.',
+  process.env.DB_PASSWORD, // No poner valor por defecto
   {
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 5432,
