@@ -50,6 +50,10 @@ app.use('*', (req, res) => {
   });
 });
 
+// Inicializar modelos
+const User = require('./models/User');
+const Personal = require('./models/Personal');
+const Blog = require('./models/Blog');
 
 connectDB().then(() => {
   app.listen(PORT, () => {

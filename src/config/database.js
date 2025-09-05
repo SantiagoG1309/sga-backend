@@ -1,4 +1,3 @@
-
 const { Sequelize } = require('sequelize');
 
 require('dotenv').config();
@@ -50,6 +49,7 @@ const connectDB = async () => {
     await createDatabaseIfNotExists();
     await sequelize.authenticate();
     console.log('PostgreSQL conectado correctamente.');
+
   // Importar los modelos para que se creen las tablas
   require('../models/Personal');
   require('../models/Blog')(sequelize);

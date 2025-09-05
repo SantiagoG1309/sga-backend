@@ -24,6 +24,7 @@ const Personal = sequelize.define('Personal', {
     allowNull: false
   },
   foto: {
+
     type: DataTypes.STRING(500),
     allowNull: true
   },
